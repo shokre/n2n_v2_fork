@@ -43,6 +43,11 @@ n2n.spec
 n2n_transforms.h
 n2n_wire.h
 sn.c
+sn_multiple_test.c
+sn_multiple.c 
+sn_multiple.h 
+sn_multiple_wire.c
+sn_multiple_wire.h
 transform_aes.c
 transform_null.c
 transform_tf.c

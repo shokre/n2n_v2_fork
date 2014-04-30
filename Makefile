@@ -1,6 +1,7 @@
 
 N2N_VERSION=2.1.0
 N2N_OSNAME=$(shell uname -p)
+SNM:=yes
 
 ########
 
@@ -29,7 +30,7 @@ ifeq ($(SNM), yes)
     N2N_DEFINES+="-DN2N_MULTIPLE_SUPERNODES"
 endif
 
-CFLAGS+=$(DEBUG) $(OPTIMIZATION) $(WARN) $(OPTIONS) $(PLATOPTS) $(N2N_DEFINES)
+CPLFLAGS+=$(DEBUG) $(OPTIMIZATION) $(WARN) $(OPTIONS) $(PLATOPTS) $(N2N_DEFINES)
 
 INSTALL=install
 MKDIR=mkdir -p
@@ -73,24 +74,24 @@ DOCS=edge.8.gz supernode.1.gz n2n_v2.7.gz
 all: $(APPS) $(DOCS)
 
 edge: edge.c $(N2N_LIB) n2n_wire.h n2n.h Makefile
-	$(CC) $(CFLAGS) edge.c $(N2N_LIB) $(LIBS_EDGE) -o edge
+	$(CC) $(CPLFLAGS) edge.c $(N2N_LIB) $(LIBS_EDGE) -o edge
 
 test: test.c $(N2N_LIB) n2n_wire.h n2n.h Makefile
-	$(CC) $(CFLAGS) test.c $(N2N_LIB) $(LIBS_EDGE) -o test
+	$(CC) $(CPLFLAGS) test.c $(N2N_LIB) $(LIBS_EDGE) -o test
 
 supernode: sn.c $(N2N_LIB) n2n.h Makefile
-	$(CC) $(CFLAGS) sn.c $(N2N_LIB) $(LIBS_SN) -o supernode
+	$(CC) $(CPLFLAGS) sn.c $(N2N_LIB) $(LIBS_SN) -o supernode
 
 benchmark: benchmark.c $(N2N_LIB) n2n_wire.h n2n.h Makefile
-	$(CC) $(CFLAGS) benchmark.c $(N2N_LIB) $(LIBS_SN) -o benchmark
+	$(CC) $(CPLFLAGS) benchmark.c $(N2N_LIB) $(LIBS_SN) -o benchmark
 
 ifeq ($(SNM), yes)
 test_snm: sn_multiple_test.c $(N2N_LIB) n2n.h Makefile
-	$(CC) $(CFLAGS) sn_multiple_test.c $(N2N_LIB) $(LIBS_SN) -o test_snm
+	$(CC) $(CPLFLAGS) sn_multiple_test.c $(N2N_LIB) $(LIBS_SN) -o test_snm
 endif
 
 .c.o: n2n.h n2n_keyfile.h n2n_transforms.h n2n_wire.h twofish.h Makefile
-	$(CC) $(CFLAGS) -c $<
+	$(CC) $(CPLFLAGS) -c $<
 
 %.gz : %
 	gzip -c $< > $@
@@ -100,7 +101,7 @@ $(N2N_LIB): $(N2N_OBJS)
 #	$(RANLIB) $@
 
 version.o: Makefile
-	$(CC) $(CFLAGS) -DN2N_VERSION='"$(N2N_VERSION)"' -DN2N_OSNAME='"$(N2N_OSNAME)"' -c version.c
+	$(CC) $(CPLFLAGS) -DN2N_VERSION='"$(N2N_VERSION)"' -DN2N_OSNAME='"$(N2N_OSNAME)"' -c version.c
 
 clean:
 	rm -rf $(N2N_OBJS) $(N2N_LIB) $(APPS) $(DOCS) test *.dSYM *~
